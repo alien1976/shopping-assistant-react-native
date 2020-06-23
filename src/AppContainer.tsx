@@ -1,15 +1,18 @@
 import React from "react";
-import { Provider as StoreProvider, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { NativeRouter, Route } from "react-router-native";
-import store from "./redux/store";
 import PopularShops from "./components/Shops/PopularShops";
 import { getAllShops } from "./redux/shopsReducer";
 import { getAllShopBrands } from "./redux/shopBrandsReducer";
+import { getAllProducts } from "./redux/productsReducer";
+import LatestProducts from "./components/Products/LatestProducts";
+import { ScrollView } from "react-native";
 
 const Home = () => {
     return (
         <>
             <PopularShops></PopularShops>
+            <LatestProducts></LatestProducts>
         </>)
 }
 
@@ -22,8 +25,7 @@ const AppContainer = () => {
         // dispatch(getAllShopBrands());
         dispatch(getAllShops());
         dispatch(getAllShopBrands());
-        console.log('getting shops')
-        // dispatch(getAllProducts());
+        dispatch(getAllProducts());
 
         // if (isLoggedIn) {
         //   try {
@@ -35,9 +37,11 @@ const AppContainer = () => {
     }, [])
 
     return (
-        <Route exact path="/">
-            <Home></Home>
-        </Route>
+        <ScrollView >
+            <Route exact path="/">
+                <Home></Home>
+            </Route>
+        </ScrollView>
     )
 }
 

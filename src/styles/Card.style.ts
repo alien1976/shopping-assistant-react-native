@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors } from './index.style';
+import { CARD_ITEM_WIDTH, CARD_ITEM_HEIGHT } from 'src/globals/constants';
 
 const IS_IOS = Platform.OS === 'ios';
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -23,17 +24,22 @@ export default StyleSheet.create({
         width: itemWidth,
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18 // needed for shadow
+        paddingBottom: 18, // needed for shadow
+        paddingRight: 30
     },
     imageContainer: {
         flex: 1,
+        justifyContent: 'center',
+        display: 'flex',
+        alignContent: 'center',
+        alignItems: 'center',
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
         backgroundColor: 'white',
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
     },
     imageContainerEven: {
-        backgroundColor: colors.black
+        backgroundColor: colors.background3
     },
     image: {
         ...StyleSheet.absoluteFillObject,
@@ -54,7 +60,7 @@ export default StyleSheet.create({
         backgroundColor: 'white'
     },
     radiusMaskEven: {
-        backgroundColor: colors.black
+        backgroundColor: 'transparent'
     },
     textContainer: {
         justifyContent: 'center',
@@ -66,7 +72,7 @@ export default StyleSheet.create({
         borderBottomRightRadius: entryBorderRadius
     },
     textContainerEven: {
-        backgroundColor: colors.black
+        backgroundColor: colors.gray
     },
     title: {
         color: colors.black,

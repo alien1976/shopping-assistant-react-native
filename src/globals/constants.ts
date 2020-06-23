@@ -1,3 +1,5 @@
+import { Dimensions } from "react-native";
+
 export const CARD_WIDTH = 250;
 export const CARD_HEIGHT = 250;
 
@@ -15,5 +17,10 @@ export const APP_IMAGES = {
     'images/fantastichi.png': require('../assets/images/fantastichi.png'),
     'images/kaaufland.png': require('../assets/images/kaaufland.png'),
     'images/shopMap.svg': require('../assets/images/shopMap.svg'),
-    'images/ttmarket.png': require('../assets/images/ttmarket.png')
+    'images/ttmarket.png': require('../assets/images/ttmarket.png'),
+    'favicon.png': require('../assets/favicon/android-chrome-192x192.png')
 }
+
+export const SLIDER_WIDTH = Dimensions.get('window').width;
+export const CARD_ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
+export const CARD_ITEM_HEIGHT = Math.round(CARD_ITEM_WIDTH * 3 / 4);
