@@ -16,31 +16,25 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     productsGrid: {
-        // display: "flex",
-        // alignItems: "flex-start",
-        // justifyContent: "center",
-        // flexDirection: "row",
-        // flexWrap: "wrap",
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
         // paddingLeft: '10px'
     }
 })
 
-const DATA = [];
-for (let i = 0; i < 10; i++) {
-    DATA.push(i)
-}
 const PopularShops = () => {
     const shops = useSelector(selectShops);
     const caroselRef = React.useRef(null);
     const [latestShops, setLatestShops] = React.useState([1, 2]);
 
     React.useEffect(() => {
-        console.log(shops)
         setLatestShops(shops.slice(Math.max(shops.length - 5, 0)));
     }, [shops])
 
     const _renderItem = ({ item, index }) => {
-        console.log(item)
         return <ShopCard shopBrandId={item.shopBrandId} address={item.address} shopId={item.shopId}></ShopCard>
     }
 
@@ -51,6 +45,8 @@ const PopularShops = () => {
             </View>
             <View style={styles.productsGrid}>
                 <Carousel
+                    layout={'default'}
+                    layoutCardOffset={20}
                     ref={(c) => caroselRef.current = c}
                     data={latestShops}
                     renderItem={_renderItem}
@@ -58,9 +54,6 @@ const PopularShops = () => {
                     itemWidth={ITEM_WIDTH}
                     containerCustomStyle={shopCardStyles.carouselContainer}
                     inactiveSlideShift={0}
-                    scrollInterpolator={scrollInterpolator}
-                    slideInterpolatedStyle={animatedStyles}
-                    useScrollView={true}
                 />
             </View>
         </>

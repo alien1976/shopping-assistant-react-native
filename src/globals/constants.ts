@@ -9,3 +9,11 @@ export const USER_ROLES = {
     'Shop Owner': 'Shop Owner',
     'Admin': 'Admin'
 }
+
+export const APP_IMAGES = {
+    'images/balla.png': require('../assets/images/balla.png'),
+    'images/fantastichi.png': require('../assets/images/fantastichi.png'),
+    'images/kaaufland.png': require('../assets/images/kaaufland.png'),
+    'images/shopMap.svg': require('../assets/images/shopMap.svg'),
+    'images/ttmarket.png': require('../assets/images/ttmarket.png')
+}

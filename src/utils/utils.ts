@@ -18,7 +18,6 @@ export function authHeader(): { [key: string]: string } {
 
 export const handleResponse = async (response: any, onError?: () => void) => {
     const res = await response;
-    console.log(response)
     const text = await res.text()
 
     const data = text && JSON.parse(text);
@@ -30,8 +29,6 @@ export const handleResponse = async (response: any, onError?: () => void) => {
         const error = (data && data.message) || res.statusText;
         throw new Error(error);
     }
-    console.log(data)
-
 
     return data;
 }

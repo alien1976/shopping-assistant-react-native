@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { IShopBrand } from '../../globals/interfaces';
-import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
+import { CARD_WIDTH, CARD_HEIGHT, APP_IMAGES } from '../../globals/constants';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
 import { useSelector } from 'react-redux';
-import { View, StyleSheet, Text, Dimensions, Image } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, Image, TouchableOpacity } from 'react-native';
+import styles from '../../styles/ShopCard.style';
+import { ParallaxImage } from 'react-native-snap-carousel';
 
 interface IProductCardProps {
     shopBrandId: string
@@ -47,7 +49,6 @@ const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
     const [shopImage, setShopImage] = React.useState('');
     const [shopName, setShopName] = React.useState('');
 
-    console.log(shopBrands)
     React.useEffect(() => {
         if (!shopBrands || !shopBrands.length) return;
         const shopBrand = shopBrands.find((el) => el.id === shopBrandId)
@@ -57,10 +58,38 @@ const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
 
     const mediaLoaded = !!shopImage && !!shopName;
 
+    const uppercaseTitle = shopName ? (
+        <Text
+            style={[styles.title, styles.titleEven]}
+            numberOfLines={2}
+        >
+            {shopName.toUpperCase()}
+        </Text>
+    ) : false;
+
     return (
-        <View style={shopCardStyles.itemContainer}>
-            <Text style={shopCardStyles.itemLabel}>{`Item ${shopName}`}</Text>
-        </View>
+        <TouchableOpacity
+            activeOpacity={1}
+            style={styles.slideInnerContainer}
+            onPress={() => { console.log(`You've clicked '${shopName}'`); }}
+        >
+            <View style={[styles.imageContainer, styles.imageContainerEven]}>
+                <Image
+                    source={APP_IMAGES[shopImage]}
+                    style={styles.image}
+                />
+                <View style={[styles.radiusMask, styles.radiusMaskEven]} />
+            </View>
+            <View style={[styles.textContainer, styles.textContainerEven]}>
+                {uppercaseTitle}
+                <Text
+                    style={[styles.subtitle, styles.subtitleEven]}
+                    numberOfLines={2}
+                >
+                    {address}
+                </Text>
+            </View>
+        </TouchableOpacity>
     )
 }
 
