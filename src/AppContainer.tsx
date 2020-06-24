@@ -8,6 +8,7 @@ import { getAllProducts } from "./redux/productsReducer";
 import LatestProducts from "./components/Products/LatestProducts";
 import { ScrollView, SafeAreaView } from "react-native";
 import AllShops from "./components/AllShops/AllShops";
+import AllProducts from "./components/AllProducts/AllProducts";
 
 const Home = () => {
     return (
@@ -45,6 +46,9 @@ const AppContainer = () => {
                 </Route>
                 <Route path="/shops">
                     <AllShops></AllShops>
+                </Route>
+                <Route path="/products">
+                    <AllProducts></AllProducts>
                 </Route>
             </Switch>
         </SafeAreaView>

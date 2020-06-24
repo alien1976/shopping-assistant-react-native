@@ -3,7 +3,7 @@ import ShopCard from '../Shops/ShopCard';
 import { useSelector } from 'react-redux';
 import { selectShops } from '../../redux/shopsReducer';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
-import { View, SafeAreaView, FlatList, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, FlatList } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -13,7 +13,6 @@ const AllShops = () => {
     const shopBrands = useSelector(selectShopBrands);
     const [currentShopBrand, setCurrentShopBrand] = React.useState('all');
     const [filteredShops, setFilteredShops] = React.useState([]);
-    const selectInputRef = React.useRef(null);
 
     React.useEffect(() => {
         setFilteredShops(shops)
@@ -24,7 +23,7 @@ const AllShops = () => {
     }, [currentShopBrand, query])
 
     const filterShops = () => {
-        const shopBrandShops = currentShopBrand === 'all' ? 'all' : shopBrands.find((el) => el.id === currentShopBrand).shopsIds;
+        const shopBrandShops = currentShopBrand === 'all' || currentShopBrand === null ? 'all' : shopBrands.find((el) => el.id === currentShopBrand).shopsIds;
 
         const newShops = shops.filter((el) => {
             return el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 &&
@@ -39,9 +38,9 @@ const AllShops = () => {
     }
 
     const placeholder = {
-        label: 'All',
-        value: 'all',
-        color: '#000000',
+        label: 'Select a shop brand',
+        value: currentShopBrand,
+        color: 'gray',
     };
 
     return (
@@ -60,16 +59,13 @@ const AllShops = () => {
                 />
                 <RNPickerSelect
                     placeholder={placeholder}
-                    items={shopBrands.map((el) => {
+                    items={[{ label: 'All shop brands', value: 'all' }, ...shopBrands.map((el) => {
                         return { label: el.name, value: el.id }
-                    })}
+                    })]}
                     onValueChange={value => {
                         setCurrentShopBrand(value)
                     }}
                     value={currentShopBrand}
-                    ref={el => {
-                        selectInputRef.current = el;
-                    }}
                 />
                 <FlatList style={{ width: '100%' }}
                     contentContainerStyle={{
