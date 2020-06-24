@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import { CARD_ITEM_WIDTH, SLIDER_WIDTH } from '../../globals/constants';
+import { SLIDER_WIDTH } from '../../globals/constants';
+import { Title } from 'react-native-paper';
 
 const styles = StyleSheet.create({
     contentTitle: {
@@ -37,7 +38,7 @@ const CarouselComponent = ({ title, data, renderItem }) => {
     return (
         <View onLayout={onLayoutChange}>
             <View style={styles.contentTitle}>
-                <Text>{title}</Text>
+                <Title style={{ color: 'white', marginBottom: 10 }}>{title}</Title>
             </View>
             <View style={styles.productsGrid}>
                 <Carousel

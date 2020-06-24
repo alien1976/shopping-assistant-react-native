@@ -4,6 +4,7 @@ import { selectShopBrands } from '../../redux/shopBrandsReducer';
 import { useSelector } from 'react-redux';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '../../styles/Card.style'
+import { IShopBrand } from 'src/globals/interfaces';
 
 interface IProductCardProps {
     shopBrandId: string

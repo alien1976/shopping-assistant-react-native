@@ -1,6 +1,6 @@
 import React from "react";
 import { Provider as StoreProvider } from 'react-redux'
-import { NativeRouter } from "react-router-native";
+import { NativeRouter, BackButton } from "react-router-native";
 import store from "./redux/store";
 import AppContainer from "./AppContainer";
 import { DrawerLayoutAndroid, Text, View, StyleSheet, Button } from "react-native";
@@ -34,17 +34,22 @@ const theme = {
 };
 
 const App = () => {
+  const drawerRef = React.useRef(null);
+
   return (
     <StoreProvider store={store}>
       <PaperProvider theme={theme}>
         <NativeRouter>
-          <DrawerLayoutAndroid
-            drawerWidth={200}
-            drawerPosition={"left" as any}
-            renderNavigationView={() => <MenuDrawer />}
-          >
-            <AppContainer />
-          </DrawerLayoutAndroid>
+          <BackButton>
+            <DrawerLayoutAndroid
+              ref={drawerRef}
+              drawerWidth={200}
+              drawerPosition={"left" as any}
+              renderNavigationView={() => <MenuDrawer drawerRef={drawerRef} />}
+            >
+              <AppContainer />
+            </DrawerLayoutAndroid>
+          </BackButton>
         </NativeRouter>
       </PaperProvider>
     </StoreProvider>
