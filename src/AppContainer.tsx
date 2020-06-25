@@ -9,6 +9,7 @@ import LatestProducts from "./components/Products/LatestProducts";
 import { ScrollView, SafeAreaView } from "react-native";
 import AllShops from "./components/AllShops/AllShops";
 import AllProducts from "./components/AllProducts/AllProducts";
+import Product from "./components/Products/Product";
 
 const Home = () => {
     return (
@@ -46,6 +47,9 @@ const AppContainer = () => {
                 </Route>
                 <Route path="/shops">
                     <AllShops></AllShops>
+                </Route>
+                <Route path="/products/:id">
+                    <Product></Product>
                 </Route>
                 <Route path="/products">
                     <AllProducts></AllProducts>

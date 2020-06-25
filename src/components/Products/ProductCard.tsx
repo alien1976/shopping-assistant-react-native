@@ -7,6 +7,7 @@ import { selectLoggedIn } from '../../redux/authenticationReducer';
 import { addProductToFavorites, selectUserFavoritesProducts, removeProductFromFavorites } from '../../redux/userReducer';
 import { TouchableOpacity, View, Image, Text } from 'react-native';
 import styles from '../../styles/Card.style'
+import { Link, useHistory } from 'react-router-native';
 
 interface IProductCardProps {
     product: IProduct
@@ -14,6 +15,7 @@ interface IProductCardProps {
 
 const ProductCard = ({ product }: IProductCardProps) => {
     const { image, id, name, price } = product;
+    const history = useHistory();
     const isInCart = useSelector((state: IStoreState) => state.appState.cart.indexOf(id.toString()) !== -1);
     const favoriteProducts = useSelector(selectUserFavoritesProducts);
     const isProductInFavorite = React.useMemo(() => {
@@ -55,9 +57,8 @@ const ProductCard = ({ product }: IProductCardProps) => {
         <TouchableOpacity
             activeOpacity={0.7}
             style={styles.slideInnerContainer}
-            onPress={() => { console.log(`You've clicked '${name}'`); }}
         >
-            <View style={[styles.imageContainer, styles.imageContainerEven]}>
+            <View style={[styles.imageContainer, styles.imageContainerEven]} onTouchEnd={() => { history.push(`/products/${product.id}`) }}>
                 <Image
                     source={{ uri: image }}
                     style={styles.image}
