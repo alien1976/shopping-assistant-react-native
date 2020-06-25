@@ -4,7 +4,7 @@ import { selectShopBrands } from '../../redux/shopBrandsReducer';
 import { useSelector } from 'react-redux';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '../../styles/Card.style'
-import { IShopBrand } from 'src/globals/interfaces';
+import { useHistory } from 'react-router-native';
 
 interface IProductCardProps {
     shopBrandId: string
@@ -16,6 +16,7 @@ const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
     const shopBrands = useSelector(selectShopBrands);
     const [shopImage, setShopImage] = React.useState('');
     const [shopName, setShopName] = React.useState('');
+    const history = useHistory();
 
     React.useEffect(() => {
         if (!shopBrands || !shopBrands.length) return;
@@ -37,15 +38,16 @@ const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
 
     return (
         <TouchableOpacity
-            activeOpacity={0.7}
+            activeOpacity={1}
             style={styles.slideInnerContainer}
-            onPress={() => { console.log(`You've clicked '${shopName}'`); }}
         >
             <View style={[styles.imageContainer, styles.imageContainerEven]}>
-                <Image
-                    source={APP_IMAGES[shopImage]}
-                    style={styles.image}
-                />
+                <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => { history.push(`/shops/${shopId}`) }}>
+                    <Image
+                        source={APP_IMAGES[shopImage]}
+                        style={styles.image}
+                    />
+                </TouchableOpacity>
                 <View style={[styles.radiusMask, styles.radiusMaskEven]} />
             </View>
             <View style={[styles.textContainer, styles.textContainerEven]}>

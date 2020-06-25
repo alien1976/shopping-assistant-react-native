@@ -55,14 +55,16 @@ const ProductCard = ({ product }: IProductCardProps) => {
 
     return (
         <TouchableOpacity
-            activeOpacity={0.7}
+            activeOpacity={1}
             style={styles.slideInnerContainer}
         >
-            <View style={[styles.imageContainer, styles.imageContainerEven]} onTouchEnd={() => { history.push(`/products/${product.id}`) }}>
-                <Image
-                    source={{ uri: image }}
-                    style={styles.image}
-                />
+            <View style={[styles.imageContainer, styles.imageContainerEven]}>
+                <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => { history.push(`/products/${product.id}`) }}>
+                    <Image
+                        source={{ uri: image }}
+                        style={styles.image}
+                    />
+                </TouchableOpacity>
                 <View style={[styles.radiusMask, styles.radiusMaskEven]} />
             </View>
             <View style={[styles.textContainer, styles.textContainerEven]}>

@@ -13,7 +13,7 @@ const PopularShops = () => {
     }, [shops])
 
     const _renderItem = ({ item, index }) => {
-        return <ShopCard shopBrandId={item.shopBrandId} address={item.address} shopId={item.shopId}></ShopCard>
+        return <ShopCard shopBrandId={item.shopBrandId} address={item.address} shopId={item.id}></ShopCard>
     }
 
     return <CarouselComponent title={'Latest shops added'} data={latestShops} renderItem={_renderItem} />

@@ -1,15 +1,16 @@
 import React from "react";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { NativeRouter, Route, Switch } from "react-router-native";
 import PopularShops from "./components/Shops/PopularShops";
 import { getAllShops } from "./redux/shopsReducer";
 import { getAllShopBrands } from "./redux/shopBrandsReducer";
-import { getAllProducts } from "./redux/productsReducer";
+import { getAllProducts, selectProducts } from "./redux/productsReducer";
 import LatestProducts from "./components/Products/LatestProducts";
 import { ScrollView, SafeAreaView } from "react-native";
 import AllShops from "./components/AllShops/AllShops";
-import AllProducts from "./components/AllProducts/AllProducts";
+import DisplayProducts from "./components/Products/DisplayProducts";
 import Product from "./components/Products/Product";
+import Shop from "./components/Shops/Shop";
 
 const Home = () => {
     return (
@@ -20,6 +21,7 @@ const Home = () => {
 }
 
 const AppContainer = () => {
+    const products = useSelector(selectProducts);
     // const isLoggedIn = useSelector(selectLoggedIn);
     // const userRole = useSelector(selectUserRole);
     const dispatch = useDispatch();
@@ -45,6 +47,9 @@ const AppContainer = () => {
                 <Route exact path="/">
                     <Home></Home>
                 </Route>
+                <Route path="/shops/:id">
+                    <Shop></Shop>
+                </Route>
                 <Route path="/shops">
                     <AllShops></AllShops>
                 </Route>
@@ -52,7 +57,7 @@ const AppContainer = () => {
                     <Product></Product>
                 </Route>
                 <Route path="/products">
-                    <AllProducts></AllProducts>
+                    <DisplayProducts products={products}></DisplayProducts>
                 </Route>
             </Switch>
         </SafeAreaView>

@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux';
 import { selectProducts } from '../../redux/productsReducer';
 import { selectShops } from '../../redux/shopsReducer';
 import { useParams } from 'react-router-native';
-import { Surface, Title, Divider, ActivityIndicator, Subheading, IconButton, Portal, Dialog, Headline, Caption } from 'react-native-paper';
-import { Image, StyleSheet, Dimensions, View, ScrollView, Text, Modal, TouchableHighlight, TouchableOpacity } from 'react-native';
-import { APP_IMAGES } from '../../globals/constants';
+import { Surface, Title, ActivityIndicator, Subheading, Portal } from 'react-native-paper';
+import { Image, StyleSheet, View, ScrollView, Text, Modal, TouchableOpacity } from 'react-native';
 import ProductLocationMap from '../Map/ProductLocationMap';
 
 const Product = () => {
@@ -37,12 +36,19 @@ const Product = () => {
 
     const mediaLoaded = !!product && !!productShop;
 
-    if (!mediaLoaded) return <ActivityIndicator animating={true} size='large' />;
+    if (!mediaLoaded) return (
+        <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator animating={true} size='large' />
+        </View>
+    )
 
     return (
         <>
             <Portal>
-                <Modal
+                <Modal presentationStyle={'fullScreen'}
+                    animated
+                    animationType="fade"
+                    transparent={false}
                     visible={dialogOpened}
                     onDismiss={() => { setDialogOpened(false) }}>
                     <TouchableOpacity activeOpacity={0.9} onPress={() => setDialogOpened(false)}>
@@ -84,60 +90,6 @@ const Product = () => {
                 </Surface>
             </ScrollView>
         </>
-        // <div className={classes.root}>
-        //     {mediaLoaded ?
-        //         <Paper className={classes.paper}>
-        //             <Grid container spacing={4}>
-        //                 <Grid item>
-        //                     {product && product.image ?
-        //                         <img className={classes.img} alt="complex" src={product.image} />
-        //                         : <div>
-        //                             <CardLoader loaded={product && product.image} />
-        //                         </div>}
-        //                 </Grid>
-        //                 <Grid item xs={12} sm container>
-        //                     <Grid item xs container direction="column" spacing={2}>
-        //                         <Grid item xs>
-        //                             <Typography gutterBottom variant="subtitle1">
-        //                                 {product.name}
-        //                             </Typography>
-        //                             <Typography variant="body2" gutterBottom>
-        //                                 Description: {product.description}
-        //                             </Typography>
-        //                         </Grid>
-        //                         <Grid item>
-        //                             <Typography variant="body1" gutterBottom>
-        //                                 Shop location:
-        //                             </Typography>
-        //                             <Typography variant="body2" gutterBottom>
-        //                                 {productShop.name}
-        //                             </Typography>
-        //                             <Typography variant="body2" gutterBottom>
-        //                                 {productShop.address}
-        //                             </Typography>
-        //                         </Grid>
-        //                         <Grid item>
-        //                             <Typography variant="body2" style={{ cursor: 'pointer', userSelect: 'none' }}>
-        //                                 Add to chart
-        //                             </Typography>
-        //                         </Grid>
-        //                         <Grid item>
-        //                             <Typography variant="body1" gutterBottom>
-        //                                 Product location in shop:
-        //                             </Typography>
-        //                         </Grid>
-        //                         <Grid item className={classes.map}>
-        //                             <ProductLocationMap productCoordinates={product.coordinates} mapImgUrl={productShop.mapImage} />
-        //                         </Grid>
-        //                     </Grid>
-        //                     <Grid item>
-        //                         <Typography variant="subtitle1">Price: {product && product.price || '...'} lv.</Typography>
-        //                     </Grid>
-        //                 </Grid>
-        //             </Grid>
-        //         </Paper>
-        //         : <ItemLoader loadingMessage="Loading product info. Please wait..." />}
-        // </div>
     )
 }
 
