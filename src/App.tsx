@@ -6,6 +6,7 @@ import AppContainer from "./AppContainer";
 import { DrawerLayoutAndroid, Text, View, StyleSheet, Button } from "react-native";
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import MenuDrawer from "./components/MenuAppBar/MenuDrawer";
+import SnackbarComponent from "./components/SnackbarComponent";
 
 const styles = StyleSheet.create({
   container: {
@@ -48,6 +49,7 @@ const App = () => {
               renderNavigationView={() => <MenuDrawer drawerRef={drawerRef} />}
             >
               <AppContainer />
+              <SnackbarComponent></SnackbarComponent>
             </DrawerLayoutAndroid>
           </BackButton>
         </NativeRouter>

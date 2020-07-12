@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 export const CARD_WIDTH = 250;
 export const CARD_HEIGHT = 250;
@@ -135,3 +135,11 @@ export const SHOP_MAP_BACKGROUND = `
     </g>
 </svg>
 `;
+
+export const styles = StyleSheet.create({
+    userInput: {
+        width: '90%',
+        backgroundColor: "#757575",
+        marginTop: 10
+    }
+});

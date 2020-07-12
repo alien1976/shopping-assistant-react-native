@@ -14,6 +14,7 @@ import Shop from "./components/Shops/Shop";
 import BottomBar from "./components/MenuAppBar/BottomBar";
 import { selectLoggedIn } from "./redux/authenticationReducer";
 import { getUserData } from "./redux/userReducer";
+import Login from "./components/Users/Login";
 
 const Home = () => {
     return (
@@ -61,6 +62,9 @@ const AppContainer = () => {
                         </Route>
                         <Route path="/products">
                             <DisplayProducts products={products}></DisplayProducts>
+                        </Route>
+                        <Route path="/login">
+                            <Login></Login>
                         </Route>
                     </Switch>
                 </View>

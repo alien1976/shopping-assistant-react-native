@@ -1,20 +1,26 @@
 import * as React from 'react';
-import { useTheme, Text } from 'react-native-paper';
-import { View, TouchableHighlight, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import { View, TouchableHighlight, StyleSheet, Keyboard } from 'react-native';
 import { useHistory, useLocation } from 'react-router-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { useDispatch } from 'react-redux';
+import { logoutRequest } from '../../redux/authenticationReducer';
 
 interface IBottomBarButton {
     iconName: string
-    route: string
+    route?: string
     text: string
-    isActive: boolean
+    isActive?: boolean
+    onButtonPress?: () => void
 }
 
-const BottomBarButton = ({ iconName, route, text, isActive }: IBottomBarButton) => {
+const BottomBarButton = ({ iconName, route, text, onButtonPress, isActive }: IBottomBarButton) => {
     const history = useHistory();
 
     const onChangeRoute = () => {
+        if (!route) return;
+
         history.push(route);
     }
 
@@ -33,24 +39,51 @@ const BottomBarButton = ({ iconName, route, text, isActive }: IBottomBarButton) 
     })
 
     return (
-        <TouchableHighlight onPress={onChangeRoute}>
+        <TouchableHighlight onPress={(route && onChangeRoute) || onButtonPress}>
             <View style={styles.button}>
-                <Icon name={iconName} size={25}></Icon>
+                {iconName === 'favorite' ? <MaterialIcon name={iconName} size={25} /> : <Icon name={iconName} size={25} />}
                 <Text>{text}</Text>
             </View>
-        </TouchableHighlight>
+        </TouchableHighlight >
     )
 }
 
 const BottomBar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     const location = useLocation();
+    const dispatch = useDispatch()
+    const [keyBoardVisible, setKeyBoardVisible] = React.useState(false)
+
+    React.useEffect(() => {
+        Keyboard.addListener("keyboardDidShow", onKeyBoardVisible);
+        Keyboard.addListener("keyboardDidHide", onKeyBoardNotVisible);
+
+        return () => {
+            Keyboard.removeListener("keyboardDidShow", onKeyBoardVisible);
+            Keyboard.removeListener("keyboardDidHide", onKeyBoardNotVisible);
+        };
+    }, []);
+
+    const onKeyBoardVisible = () => {
+        setKeyBoardVisible(true)
+    }
+
+    const onKeyBoardNotVisible = () => {
+        setKeyBoardVisible(false)
+    }
+
+    const onSignOut = () => {
+        dispatch(logoutRequest())
+    };
+
+    if (keyBoardVisible) return null;
 
     return (
         <View style={{ flex: 0.08, display: 'flex', alignContent: 'center', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', backgroundColor: 'gray' }}>
             <BottomBarButton iconName="home" route="/" text="Home" isActive={location.pathname === '/'} />
-            {isLoggedIn && <BottomBarButton iconName="favorites" route="/user-favorite-products" text="Favorite products" isActive={location.pathname === '/user-favorite-products'} />}
+            {isLoggedIn && <BottomBarButton iconName="favorite" route="/user-favorite-products" text="Favorite products" isActive={location.pathname === '/user-favorite-products'} />}
             {isLoggedIn && <BottomBarButton iconName="user" route="/user-profile" text="Profile" isActive={location.pathname === '/user-profile'} />}
-            {!isLoggedIn && <BottomBarButton iconName="login" route="/login" text="Login" isActive={location.pathname === '/login'} />}
+            {isLoggedIn && <BottomBarButton iconName="sign-out" text="Log out" onButtonPress={onSignOut} />}
+            {!isLoggedIn && <BottomBarButton iconName="sign-in" route="/login" text="Login" isActive={location.pathname === '/login'} />}
         </View>
     );
 }
