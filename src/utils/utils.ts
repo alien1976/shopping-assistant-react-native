@@ -1,16 +1,16 @@
 // import store from "../redux/store";
-import { Dimensions } from "react-native";
+import { Dimensions, AsyncStorage } from "react-native";
 import { getInputRangeFromIndexes } from "react-native-snap-carousel";
 
 export function timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function authHeader(): { [key: string]: string } {
-    let userToken = {};
+export async function authHeader(): Promise<{ [key: string]: string }> {
+    const user = JSON.parse(await AsyncStorage.getItem('user'))
 
-    if (userToken) {
-        return { 'Authorization': 'Bearer ' + userToken };
+    if (user && user.token) {
+        return { 'Authorization': 'Bearer ' + user.token };
     } else {
         return {};
     }

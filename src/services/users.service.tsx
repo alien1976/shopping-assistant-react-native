@@ -1,6 +1,7 @@
 import { authHeader, handleResponse } from "../utils/utils";
 import { IUser } from '../globals/interfaces';
 import { SA_API_BASE } from "../globals/constants";
+import { AsyncStorage } from "react-native";
 
 const login = async (userName: string, password: string) => {
     const requestOptions = {
@@ -11,18 +12,18 @@ const login = async (userName: string, password: string) => {
 
     const response = await fetch(`${SA_API_BASE}/auth/login`, requestOptions);
     const user = await handleResponse(response);
-    // localStorage.setItem('user', JSON.stringify(user));
+    await AsyncStorage.setItem('user', JSON.stringify(user))
     return user;
 }
 
-const logout = () => {
-    // localStorage.removeItem('user');
+const logout = async () => {
+    await AsyncStorage.removeItem('user')
 }
 
 const getAllUsers = async () => {
     const requestOptions = {
         method: 'GET',
-        headers: authHeader()
+        headers: await authHeader()
     };
 
     const response = fetch(`${SA_API_BASE}/users`, requestOptions);
@@ -32,7 +33,7 @@ const getAllUsers = async () => {
 const getUserById = async (id: string) => {
     const requestOptions = {
         method: 'GET',
-        headers: authHeader()
+        headers: await authHeader()
     };
 
     const response = fetch(`${SA_API_BASE}/users/${id}`, requestOptions)
@@ -53,7 +54,7 @@ const registerUser = async (user: IUser) => {
 const updateUser = async (user: IUser) => {
     const requestOptions = {
         method: 'PUT',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        headers: { ...await authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
 
@@ -64,7 +65,7 @@ const updateUser = async (user: IUser) => {
 const deleteUser = async (userId: string) => {
     const requestOptions = {
         method: 'DELETE',
-        headers: authHeader()
+        headers: await authHeader()
     };
 
     const response = fetch(`${SA_API_BASE}/users/${userId}`, requestOptions)

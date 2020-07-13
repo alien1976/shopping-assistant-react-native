@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text } from 'react-native-paper';
-import { View, TouchableHighlight, StyleSheet, Keyboard } from 'react-native';
+import { View, TouchableHighlight, StyleSheet, Keyboard, TouchableOpacity } from 'react-native';
 import { useHistory, useLocation } from 'react-router-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -34,17 +34,17 @@ const BottomBarButton = ({ iconName, route, text, onButtonPress, isActive }: IBo
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
-            backgroundColor: isActive ? 'orange' : 'darkorange'
+            backgroundColor: isActive ? 'darkgray' : 'transparent'
         }
     })
 
     return (
-        <TouchableHighlight onPress={(route && onChangeRoute) || onButtonPress}>
+        <TouchableOpacity onPress={(route && onChangeRoute) || onButtonPress}>
             <View style={styles.button}>
                 {iconName === 'favorite' ? <MaterialIcon name={iconName} size={25} /> : <Icon name={iconName} size={25} />}
                 <Text>{text}</Text>
             </View>
-        </TouchableHighlight >
+        </TouchableOpacity >
     )
 }
 
@@ -78,12 +78,13 @@ const BottomBar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     if (keyBoardVisible) return null;
 
     return (
-        <View style={{ flex: 0.08, display: 'flex', alignContent: 'center', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', backgroundColor: 'gray' }}>
+        <View style={{ flex: 0.08, display: 'flex', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: 'gray' }}>
             <BottomBarButton iconName="home" route="/" text="Home" isActive={location.pathname === '/'} />
             {isLoggedIn && <BottomBarButton iconName="favorite" route="/user-favorite-products" text="Favorite products" isActive={location.pathname === '/user-favorite-products'} />}
             {isLoggedIn && <BottomBarButton iconName="user" route="/user-profile" text="Profile" isActive={location.pathname === '/user-profile'} />}
             {isLoggedIn && <BottomBarButton iconName="sign-out" text="Log out" onButtonPress={onSignOut} />}
             {!isLoggedIn && <BottomBarButton iconName="sign-in" route="/login" text="Login" isActive={location.pathname === '/login'} />}
+            {!isLoggedIn && <BottomBarButton iconName="pencil-square" route="/sign-up" text="Sign up" isActive={location.pathname === '/sign-up'} />}
         </View>
     );
 }

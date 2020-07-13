@@ -3,7 +3,8 @@ import { IStoreState } from './store';
 import { userService } from '../services/users.service';
 import { openSnackBar } from './snackBarReducer';
 import { IUser } from '../globals/interfaces';
-import { setUser } from './userReducer';
+import { setUser, getUserData } from './userReducer';
+import { AsyncStorage } from 'react-native';
 
 export interface IUsersSate {
     cart: string[]
@@ -49,7 +50,17 @@ export const authSlice = createSlice({
 //actions
 export const { loginRequest, loginSuccess, loginFailure, registerRequest, registerEnd, logout } = authSlice.actions;
 
+export const setUserToken = () => async (dispatch: React.Dispatch<AnyAction>) => {
+    const token = await AsyncStorage.getItem('user');
+    if (!token) return;
+    const tokenData = JSON.parse(token);
+    dispatch(loginSuccess(tokenData));
+    //@ts-ignore
+    dispatch(getUserData(tokenData.user.id))
+}
+
 export const logoutRequest = () => async (dispatch: React.Dispatch<AnyAction>) => {
+    await AsyncStorage.removeItem('user')
     dispatch(logout());
     dispatch(setUser({}))
     dispatch(openSnackBar({ message: 'Successfully sign out', status: 'success' }))

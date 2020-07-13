@@ -3,7 +3,8 @@ import { IStoreState } from './store';
 import { userService } from '../services/users.service';
 import { openSnackBar } from './snackBarReducer';
 import { IUser } from '../globals/interfaces';
-// import { logout } from './authenticationReducer';
+import { logout } from './authenticationReducer';
+import { AsyncStorage } from 'react-native';
 
 //reducers
 export const userSlice = createSlice({
@@ -98,7 +99,8 @@ export const deleteUser = (userId: string) => async (dispatch: React.Dispatch<An
     try {
         await userService.deleteUser(userId);
         dispatch(setDeletingUser(false));
-        // dispatch(logout());
+        await AsyncStorage.removeItem('user')
+        dispatch(logout());
         dispatch(setUser({}))
         dispatch(openSnackBar({ message: `Successfully deleted user account!`, status: 'success' }));
     } catch (error) {

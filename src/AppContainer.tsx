@@ -1,20 +1,21 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import { Route, Switch } from "react-router-native";
+import { Route, Switch, Redirect } from "react-router-native";
 import PopularShops from "./components/Shops/PopularShops";
 import { getAllShops } from "./redux/shopsReducer";
 import { getAllShopBrands } from "./redux/shopBrandsReducer";
 import { getAllProducts, selectProducts } from "./redux/productsReducer";
 import LatestProducts from "./components/Products/LatestProducts";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import AllShops from "./components/AllShops/AllShops";
 import DisplayProducts from "./components/Products/DisplayProducts";
 import Product from "./components/Products/Product";
 import Shop from "./components/Shops/Shop";
 import BottomBar from "./components/MenuAppBar/BottomBar";
-import { selectLoggedIn } from "./redux/authenticationReducer";
-import { getUserData } from "./redux/userReducer";
+import { selectLoggedIn, setUserToken } from "./redux/authenticationReducer";
 import Login from "./components/Users/Login";
+import SignUp from "./components/Users/SignUp";
+import Profile from "./components/Users/Profile";
 
 const Home = () => {
     return (
@@ -33,14 +34,7 @@ const AppContainer = () => {
         dispatch(getAllShops());
         dispatch(getAllShopBrands());
         dispatch(getAllProducts());
-
-        if (isLoggedIn) {
-            try {
-                dispatch(getUserData(JSON.parse(localStorage.user).user.id))
-            } catch (error) {
-                console.error(error)
-            }
-        }
+        dispatch(setUserToken())
     }, [])
 
     return (
@@ -66,6 +60,14 @@ const AppContainer = () => {
                         <Route path="/login">
                             <Login></Login>
                         </Route>
+                        <Route path="/sign-up">
+                            <SignUp></SignUp>
+                        </Route>
+                        <Route path='/user-profile' render={props => (
+                            !isLoggedIn ?
+                                <Redirect to="/login" />
+                                : <Profile />
+                        )} />
                     </Switch>
                 </View>
                 <BottomBar isLoggedIn={isLoggedIn} />
