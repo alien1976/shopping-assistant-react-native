@@ -25,23 +25,6 @@ const Profile = () => {
         setEmail(user.email);
     }, [user]);
 
-    const createTwoButtonAlert = () => {
-        Alert.alert(
-            "Are you sure you want to delete your profile?",
-            "This action cannot be undone and your accout will be permanently deleted!",
-            [
-                {
-                    text: "Cancel",
-                    style: "cancel"
-                },
-                {
-                    text: "Delete", onPress: () => dispatch(deleteUser(user.id))
-                }
-            ],
-            { cancelable: false }
-        )
-    }
-
     const onSubmit = () => {
         if (firstName && lastName && userName && email) {
             dispatch(updateUserData({ ...user, firstName, lastName, userName, password: password ? password : user.password, email } as IUser));

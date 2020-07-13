@@ -3,9 +3,8 @@ import { IProduct } from '../../globals/interfaces';
 import ProductCard from './ProductCard';
 import { useSelector } from 'react-redux';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
-import { selectProducts } from '../../redux/productsReducer';
-import { View, SafeAreaView, FlatList } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import { SafeAreaView, FlatList, View } from 'react-native';
+import { Searchbar, ActivityIndicator } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
 const DisplayProducts = ({ products }) => {
@@ -23,7 +22,7 @@ const DisplayProducts = ({ products }) => {
 
     React.useEffect(() => {
         filterProducts();
-    }, [query, currentShopBrand])
+    }, [query, products, currentShopBrand, searchByValue])
 
     const filterProducts = () => {
         const shopBrandProducts = currentShopBrand === 'all' ? 'all' : shopBrands.find((el) => el.id === currentShopBrand).productsIds;
@@ -66,6 +65,14 @@ const DisplayProducts = ({ products }) => {
         color: 'gray',
     };
 
+    const mediaLoaded = !!products && !!filteredProducts;
+
+    if (!mediaLoaded) return (
+        <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator animating={true} size='large' />
+        </View>
+    )
+
     return (
         <SafeAreaView style={{
             marginTop: 5,
@@ -105,6 +112,9 @@ const DisplayProducts = ({ products }) => {
                 contentContainerStyle={{
                     alignItems: 'center',
                 }}
+                ListHeaderComponent={!mediaLoaded ? <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator animating={true} size='large' />
+                </View> : null}
                 data={filteredProducts}
                 renderItem={({ item }) => <ProductCard key={item.id} product={item} />}
                 keyExtractor={item => item.id}

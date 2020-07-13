@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, ActivityIndicator } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { SLIDER_WIDTH } from '../../globals/constants';
 import { Title } from 'react-native-paper';
+import { useLoaded } from '../../utils/customHooks';
 
 const styles = StyleSheet.create({
     contentTitle: {
@@ -34,6 +35,14 @@ const CarouselComponent = ({ title, data, renderItem }) => {
         setSliderWidth(Dimensions.get('window').width)
         setItemWidth(Dimensions.get('window').width * 0.7)
     }
+
+    const loaded = useLoaded();
+
+    if (!loaded) return (
+        <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator animating={true} size='large' />
+        </View>
+    )
 
     return (
         <View onLayout={onLayoutChange}>

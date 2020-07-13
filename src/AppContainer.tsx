@@ -16,6 +16,7 @@ import { selectLoggedIn, setUserToken } from "./redux/authenticationReducer";
 import Login from "./components/Users/Login";
 import SignUp from "./components/Users/SignUp";
 import Profile from "./components/Users/Profile";
+import UserFavoriteProducts from "./components/Users/UserFavoriteProducts";
 
 const Home = () => {
     return (
@@ -67,6 +68,11 @@ const AppContainer = () => {
                             !isLoggedIn ?
                                 <Redirect to="/login" />
                                 : <Profile />
+                        )} />
+                        <Route path='/user-favorite-products' render={props => (
+                            !isLoggedIn ?
+                                <Redirect to="/login" />
+                                : <UserFavoriteProducts />
                         )} />
                     </Switch>
                 </View>

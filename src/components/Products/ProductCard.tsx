@@ -7,7 +7,9 @@ import { selectLoggedIn } from '../../redux/authenticationReducer';
 import { addProductToFavorites, selectUserFavoritesProducts, removeProductFromFavorites } from '../../redux/userReducer';
 import { TouchableOpacity, View, Image, Text } from 'react-native';
 import styles from '../../styles/Card.style'
-import { Link, useHistory } from 'react-router-native';
+import { useHistory } from 'react-router-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconType2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface IProductCardProps {
     product: IProduct
@@ -69,14 +71,22 @@ const ProductCard = ({ product }: IProductCardProps) => {
             </View>
             <View style={[styles.textContainer, styles.textContainerEven]}>
                 {uppercaseTitle}
-                <Text
-                    style={[styles.subtitle, styles.subtitleEven]}
-                    numberOfLines={2}
-                >
-                    {price}
-                </Text>
+                <View style={{ display: 'flex', flexDirection: 'row', alignContent: 'space-between', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text
+                        style={[styles.subtitle, styles.subtitleEven]}
+                        numberOfLines={2}
+                    >
+                        {price}
+                    </Text>
+                    <Text
+                        style={[styles.subtitle, styles.subtitleEven]}
+                    >
+                        {isUserLogged && <Icon name={isProductInFavorite ? 'favorite' : 'favorite-border'} onPress={addToFavorites} size={25} />}
+                        {isUserLogged && <IconType2 name={isInCart ? 'cart' : 'cart-outline'} onPress={productToCartToggle} size={25} />}
+                    </Text>
+                </View>
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity >
     )
 }
 
