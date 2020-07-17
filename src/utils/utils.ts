@@ -1,5 +1,5 @@
-// import store from "../redux/store";
-import { Dimensions, AsyncStorage } from "react-native";
+import { Dimensions } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import { getInputRangeFromIndexes } from "react-native-snap-carousel";
 
 export function timeout(ms: number) {

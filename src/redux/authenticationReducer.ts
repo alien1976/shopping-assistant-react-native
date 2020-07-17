@@ -4,7 +4,7 @@ import { userService } from '../services/users.service';
 import { openSnackBar } from './snackBarReducer';
 import { IUser } from '../globals/interfaces';
 import { setUser, getUserData } from './userReducer';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export interface IUsersSate {
     cart: string[]

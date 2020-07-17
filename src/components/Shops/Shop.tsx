@@ -5,9 +5,10 @@ import { selectShopBrands } from '../../redux/shopBrandsReducer';
 import { selectProducts } from '../../redux/productsReducer';
 import { useParams } from 'react-router-native';
 import { Portal, Surface, Title, Subheading, ActivityIndicator } from 'react-native-paper';
-import { Modal, StyleSheet, TouchableOpacity, Image, ScrollView, View, Linking, TouchableWithoutFeedback } from 'react-native';
+import { Modal, StyleSheet, TouchableOpacity, Image, ScrollView, View, Linking } from 'react-native';
 import { APP_IMAGES } from '../../globals/constants';
 import DisplayProducts from '../Products/DisplayProducts';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const Shop = () => {
     const [dialogOpened, setDialogOpened] = React.useState(false);
@@ -72,9 +73,12 @@ const Shop = () => {
                     <View>
                         <Title>{shop.name}</Title>
                         <Subheading>Shop address: {shop.address}</Subheading>
-                        <TouchableWithoutFeedback onPress={openGoogleMaps}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Subheading>Check location on google maps</Subheading>
-                        </TouchableWithoutFeedback>
+                            <TouchableOpacity onPress={openGoogleMaps}>
+                                <Icon name="google-maps" size={30} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </Surface>
                 <Surface style={[styles.surface, { width: '100%' }]}>

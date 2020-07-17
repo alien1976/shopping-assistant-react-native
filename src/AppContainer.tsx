@@ -17,6 +17,8 @@ import Login from "./components/Users/Login";
 import SignUp from "./components/Users/SignUp";
 import Profile from "./components/Users/Profile";
 import UserFavoriteProducts from "./components/Users/UserFavoriteProducts";
+import ShoppingCart from "./components/ShoppingCart/ShoppingCart";
+import ShoppingNavigation from "./components/ShoppingCart/ShoppingNavigation";
 
 const Home = () => {
     return (
@@ -63,6 +65,12 @@ const AppContainer = () => {
                         </Route>
                         <Route path="/sign-up">
                             <SignUp></SignUp>
+                        </Route>
+                        <Route path="/shopping-cart/:id">
+                            <ShoppingNavigation></ShoppingNavigation>
+                        </Route>
+                        <Route path="/shopping-cart">
+                            <ShoppingCart></ShoppingCart>
                         </Route>
                         <Route path='/user-profile' render={props => (
                             !isLoggedIn ?

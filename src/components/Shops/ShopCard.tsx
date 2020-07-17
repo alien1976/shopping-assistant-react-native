@@ -10,9 +10,10 @@ interface IProductCardProps {
     shopBrandId: string
     shopId: string
     address: string
+    disabled: boolean
 }
 
-const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
+const ShopCard = ({ shopBrandId, shopId, address, disabled = false }: IProductCardProps) => {
     const shopBrands = useSelector(selectShopBrands);
     const [shopImage, setShopImage] = React.useState('');
     const [shopName, setShopName] = React.useState('');
@@ -38,11 +39,13 @@ const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
 
     return (
         <TouchableOpacity
+            onPress={() => { }}
+            disabled={disabled}
             activeOpacity={1}
             style={styles.slideInnerContainer}
         >
             <View style={[styles.imageContainer, styles.imageContainerEven]}>
-                <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => { history.push(`/shops/${shopId}`) }}>
+                <TouchableOpacity disabled={disabled} style={{ width: '100%', height: '100%' }} onPress={() => { history.push(`/shops/${shopId}`) }}>
                     <Image
                         source={APP_IMAGES[shopImage]}
                         style={styles.image}

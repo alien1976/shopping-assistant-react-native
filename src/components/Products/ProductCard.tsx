@@ -58,10 +58,11 @@ const ProductCard = ({ product }: IProductCardProps) => {
     return (
         <TouchableOpacity
             activeOpacity={1}
+            disabled={true}
             style={styles.slideInnerContainer}
         >
             <View style={[styles.imageContainer, styles.imageContainerEven]}>
-                <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => { history.push(`/products/${product.id}`) }}>
+                <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => { console.log('aa'); history.push(`/products/${product.id}`) }}>
                     <Image
                         source={{ uri: image }}
                         style={styles.image}
@@ -78,12 +79,26 @@ const ProductCard = ({ product }: IProductCardProps) => {
                     >
                         {price}
                     </Text>
-                    <Text
-                        style={[styles.subtitle, styles.subtitleEven]}
-                    >
-                        {isUserLogged && <Icon name={isProductInFavorite ? 'favorite' : 'favorite-border'} onPress={addToFavorites} size={25} />}
-                        {isUserLogged && <IconType2 name={isInCart ? 'cart' : 'cart-outline'} onPress={productToCartToggle} size={25} />}
-                    </Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        {isUserLogged &&
+                            <TouchableOpacity onPress={addToFavorites}>
+                                <Text
+                                    style={[styles.subtitle, styles.subtitleEven, { marginRight: 20, textAlign: 'center', textAlignVertical: 'center' }]}
+                                >
+                                    {<Icon name={isProductInFavorite ? 'favorite' : 'favorite-border'} size={30} />}
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                        {isUserLogged &&
+                            <TouchableOpacity onPress={productToCartToggle}>
+                                <Text
+                                    style={[styles.subtitle, styles.subtitleEven, { textAlignVertical: 'center', textAlign: 'center' }]}
+                                >
+                                    {isUserLogged && <IconType2 name={isInCart ? 'cart' : 'cart-outline'} onPress={productToCartToggle} size={30} />}
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                    </View>
                 </View>
             </View>
         </TouchableOpacity >

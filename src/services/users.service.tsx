@@ -1,7 +1,7 @@
 import { authHeader, handleResponse } from "../utils/utils";
 import { IUser } from '../globals/interfaces';
 import { SA_API_BASE } from "../globals/constants";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 
 const login = async (userName: string, password: string) => {
     const requestOptions = {

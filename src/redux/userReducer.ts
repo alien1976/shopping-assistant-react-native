@@ -4,7 +4,7 @@ import { userService } from '../services/users.service';
 import { openSnackBar } from './snackBarReducer';
 import { IUser } from '../globals/interfaces';
 import { logout } from './authenticationReducer';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //reducers
 export const userSlice = createSlice({

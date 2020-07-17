@@ -13,6 +13,7 @@ const DisplayProducts = ({ products }) => {
     const [currentShopBrand, setCurrentShopBrand] = React.useState('all');
     const shopBrands = useSelector(selectShopBrands);
     const [filteredProducts, setFilteredProducts] = React.useState([]);
+    const firstRender = React.useRef(false);
 
     React.useEffect(() => {
         if (!products || !products.length) return;
@@ -32,6 +33,7 @@ const DisplayProducts = ({ products }) => {
                 (shopBrandProducts === 'all' || shopBrandProducts.indexOf(el.id) !== -1)
         })
 
+        firstRender.current = true;
         sortProducts(newProducts);
         setFilteredProducts(newProducts);
     }
@@ -65,11 +67,11 @@ const DisplayProducts = ({ products }) => {
         color: 'gray',
     };
 
-    const mediaLoaded = !!products && !!filteredProducts;
+    const mediaLoaded = !!products && !!filteredProducts && firstRender.current;
 
     if (!mediaLoaded) return (
         <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator animating={true} size='large' />
+            <ActivityIndicator animating={true} color="orange" size='large' />
         </View>
     )
 
@@ -112,9 +114,6 @@ const DisplayProducts = ({ products }) => {
                 contentContainerStyle={{
                     alignItems: 'center',
                 }}
-                ListHeaderComponent={!mediaLoaded ? <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                    <ActivityIndicator animating={true} size='large' />
-                </View> : null}
                 data={filteredProducts}
                 renderItem={({ item }) => <ProductCard key={item.id} product={item} />}
                 keyExtractor={item => item.id}

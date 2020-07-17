@@ -43,6 +43,7 @@ const SnackbarComponent = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        bottom: '8%',
         justifyContent: 'space-between',
     },
 });

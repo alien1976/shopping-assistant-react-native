@@ -40,7 +40,7 @@ const CarouselComponent = ({ title, data, renderItem }) => {
 
     if (!loaded) return (
         <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator animating={true} size='large' />
+            <ActivityIndicator animating={true} color="orange" size='large' />
         </View>
     )
 
