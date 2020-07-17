@@ -4,20 +4,29 @@ import { useSelector } from 'react-redux';
 import { selectCart } from '../../redux/cartReducer';
 import { selectShops } from '../../redux/shopsReducer';
 import { selectProducts } from '../../redux/productsReducer';
-import { useHistory, Link, Redirect } from 'react-router-native';
+import { Redirect } from 'react-router-native';
 import { Title, ActivityIndicator, Badge, Text } from 'react-native-paper';
 import { FlatList, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import styles from '../../styles/Card.style'
+import { selectLoggedIn } from '../../redux/authenticationReducer';
+import { selectUserCart } from '../../redux/userReducer';
 
 const ShoppingChart = () => {
-    const history = useHistory();
     const allShops = useSelector(selectShops);
     const products = useSelector(selectProducts);
-    const productsInCartIds = useSelector(selectCart);
+    const isUserLogged = useSelector(selectLoggedIn);
+    const userCart = useSelector(selectUserCart);
+    const cart = useSelector(selectCart);
     const [shops, setShops] = React.useState([]);
     const [allProducts, setAllProducts] = React.useState([]);
     const [initData, setInitData] = React.useState(false);
     const [navigateToShop, setNavigateToShop] = React.useState({ shouldNavigate: false, item: null })
+
+    const productsInCartIds = React.useMemo(() => {
+        if (isUserLogged) return userCart;
+
+        return cart;
+    }, [isUserLogged, userCart, cart])
 
     React.useEffect(() => {
         setInitData(true)

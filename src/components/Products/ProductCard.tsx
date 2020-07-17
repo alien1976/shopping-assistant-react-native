@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { addProductToCart, removeProductFromCart } from '../../redux/cartReducer';
+import { addProductToCart, removeProductFromCart, selectCart } from '../../redux/cartReducer';
 import { useSelector, useDispatch } from 'react-redux';
-import { IStoreState } from '../../redux/store';
 import { IProduct } from '../../globals/interfaces';
 import { selectLoggedIn } from '../../redux/authenticationReducer';
-import { addProductToFavorites, selectUserFavoritesProducts, removeProductFromFavorites } from '../../redux/userReducer';
+import { addProductToFavorites, selectUserFavoritesProducts, removeProductFromFavorites, selectUserCart, removeProductFromUserCart, addProductToUserCart } from '../../redux/userReducer';
 import { TouchableOpacity, View, Image, Text } from 'react-native';
 import styles from '../../styles/Card.style'
 import { useHistory } from 'react-router-native';
@@ -18,7 +17,6 @@ interface IProductCardProps {
 const ProductCard = ({ product }: IProductCardProps) => {
     const { image, id, name, price } = product;
     const history = useHistory();
-    const isInCart = useSelector((state: IStoreState) => state.appState.cart.indexOf(id.toString()) !== -1);
     const favoriteProducts = useSelector(selectUserFavoritesProducts);
     const isProductInFavorite = React.useMemo(() => {
         if (!favoriteProducts) return false;
@@ -28,13 +26,22 @@ const ProductCard = ({ product }: IProductCardProps) => {
 
     const dispatch = useDispatch();
     const isUserLogged = useSelector(selectLoggedIn);
+
+    const userCart = useSelector(selectUserCart);
+    const cart = useSelector(selectCart);
+    const isInCart = React.useMemo(() => {
+        if (isUserLogged) return userCart && userCart.indexOf(id.toString()) !== -1 ? true : false;
+
+        return cart && cart.indexOf(id.toString()) !== -1 ? true : false;
+    }, [isUserLogged, userCart, cart])
+
     const mediaLoaded = !!image && !!name;
 
     const productToCartToggle = () => {
         if (isInCart) {
-            dispatch(removeProductFromCart(id.toString()));
+            !isUserLogged ? dispatch(removeProductFromCart(id.toString())) : dispatch(removeProductFromUserCart(id.toString()));
         } else {
-            dispatch(addProductToCart(id.toString()));
+            !isUserLogged ? dispatch(addProductToCart(id.toString())) : dispatch(addProductToUserCart(id.toString()));
         }
     }
 
@@ -62,7 +69,7 @@ const ProductCard = ({ product }: IProductCardProps) => {
             style={styles.slideInnerContainer}
         >
             <View style={[styles.imageContainer, styles.imageContainerEven]}>
-                <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => { console.log('aa'); history.push(`/products/${product.id}`) }}>
+                <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => { history.push(`/products/${product.id}`) }}>
                     <Image
                         source={{ uri: image }}
                         style={styles.image}
@@ -89,15 +96,13 @@ const ProductCard = ({ product }: IProductCardProps) => {
                                 </Text>
                             </TouchableOpacity>
                         }
-                        {isUserLogged &&
-                            <TouchableOpacity onPress={productToCartToggle}>
-                                <Text
-                                    style={[styles.subtitle, styles.subtitleEven, { textAlignVertical: 'center', textAlign: 'center' }]}
-                                >
-                                    {isUserLogged && <IconType2 name={isInCart ? 'cart' : 'cart-outline'} onPress={productToCartToggle} size={30} />}
-                                </Text>
-                            </TouchableOpacity>
-                        }
+                        <TouchableOpacity onPress={productToCartToggle}>
+                            <Text
+                                style={[styles.subtitle, styles.subtitleEven, { textAlignVertical: 'center', textAlign: 'center' }]}
+                            >
+                                <IconType2 name={isInCart ? 'cart' : 'cart-outline'} onPress={productToCartToggle} size={30} />
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

@@ -5,8 +5,8 @@ import { useHistory, useLocation } from 'react-router-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutRequest } from '../../redux/authenticationReducer';
-import { selectUserFavoritesProducts } from '../../redux/userReducer';
+import { logoutRequest, selectLoggedIn } from '../../redux/authenticationReducer';
+import { selectUserFavoritesProducts, selectUserCart } from '../../redux/userReducer';
 import { selectCartLength } from '../../redux/cartReducer';
 
 interface IBottomBarButton {
@@ -57,6 +57,15 @@ const BottomBar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     const dispatch = useDispatch();
     const favoriteProducts = useSelector(selectUserFavoritesProducts);
     const cartLength = useSelector(selectCartLength)
+    const userCart = useSelector(selectUserCart);
+    const isUserLogged = useSelector(selectLoggedIn);
+
+    const productsInCart = React.useMemo(() => {
+        if (isUserLogged) return userCart ? userCart.length : 0;
+
+        return cartLength;
+    }, [isUserLogged, userCart, cartLength])
+
     const favoriteProductsLength = React.useMemo(() => {
         if (!favoriteProducts) return 0;
 
@@ -92,7 +101,7 @@ const BottomBar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     return (
         <View style={{ flex: 0.08, display: 'flex', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: 'gray' }}>
             <BottomBarButton iconName="home" route="/" text="Home" isActive={location.pathname === '/'} />
-            {isLoggedIn && <BottomBarButton badgeNumber={cartLength.toString()} iconName="shopping-cart" route="/shopping-cart" text="Cart" isActive={location.pathname.indexOf('/shopping-cart') !== -1} />}
+            <BottomBarButton badgeNumber={productsInCart.toString()} iconName="shopping-cart" route="/shopping-cart" text="Cart" isActive={location.pathname.indexOf('/shopping-cart') !== -1} />
             {isLoggedIn && <BottomBarButton badgeNumber={favoriteProductsLength.toString()} iconName="favorite" route="/user-favorite-products" text="Favorites" isActive={location.pathname === '/user-favorite-products'} />}
             {isLoggedIn && <BottomBarButton iconName="user" route="/user-profile" text="Profile" isActive={location.pathname === '/user-profile'} />}
             {isLoggedIn && <BottomBarButton iconName="sign-out" text="Log out" onButtonPress={onSignOut} />}

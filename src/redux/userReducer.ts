@@ -41,6 +41,8 @@ export const getUserData = (userId: string) => async (dispatch: React.Dispatch<A
         dispatch(setGettingUserData(false));
         dispatch(setUser(userData));
     } catch (error) {
+        logout()
+        dispatch(setUser({}))
         dispatch(setGettingUserData(false));
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
     }
@@ -56,6 +58,37 @@ export const updateUserData = (user: IUser) => async (dispatch: React.Dispatch<A
         dispatch(openSnackBar({ message: `Successfully updated user data!`, status: 'success' }));
     } catch (error) {
         dispatch(setUpdatingUser(false));
+        dispatch(openSnackBar({ message: error.message, status: 'error' }))
+    }
+};
+
+export const addProductToUserCart = (productId: string) => async (dispatch: React.Dispatch<AnyAction>, getState: any) => {
+    const user = { ...getState().userState.user };
+
+    if (!user.cart) user.cart = [];
+    if (user.cart.indexOf(productId) !== -1) return;
+
+    user.cart = user.cart.concat([productId]);
+
+    try {
+        await userService.updateUser(user);
+        dispatch(setUser(user))
+    } catch (error) {
+        dispatch(openSnackBar({ message: error.message, status: 'error' }))
+    }
+};
+
+export const removeProductFromUserCart = (productId: string) => async (dispatch: React.Dispatch<AnyAction>, getState: any) => {
+    const user = { ...getState().userState.user } as IUser;
+
+    if (!user.cart || !user.cart.length) return;
+
+    user.cart = user.cart.filter((el) => el !== productId)
+
+    try {
+        await userService.updateUser(user);
+        dispatch(setUser(user))
+    } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
     }
 };
@@ -100,7 +133,7 @@ export const deleteUser = (userId: string) => async (dispatch: React.Dispatch<An
         await userService.deleteUser(userId);
         dispatch(setDeletingUser(false));
         await AsyncStorage.removeItem('user')
-        dispatch(logout());
+        logout()
         dispatch(setUser({}))
         dispatch(openSnackBar({ message: `Successfully deleted user account!`, status: 'success' }));
     } catch (error) {
@@ -114,5 +147,6 @@ export const selectUser = (state: IStoreState) => state.userState.user;
 export const selectUserRole = (state: IStoreState) => state.userState.user && state.userState.user.role;
 export const selectUpdatingUser = (state: IStoreState) => state.userState.updatingUser;
 export const selectUserFavoritesProducts = (state: IStoreState) => state.userState.user.favoriteProducts;
+export const selectUserCart = (state: IStoreState) => state.userState.user.cart;
 
 export default userSlice.reducer;

@@ -9,6 +9,8 @@ import styles from '../../styles/Card.style'
 import { WebView } from 'react-native-webview';
 import { pathGenerator } from './PathGenerator.worker';
 import MapPathFinder from '../Map/MapPathFinder';
+import { selectLoggedIn } from '../../redux/authenticationReducer';
+import { addProductToUserCart, removeProductFromUserCart } from '../../redux/userReducer';
 
 interface IShoppingNavigationProps {
     products: (IProduct & { bought: boolean })[]
@@ -51,6 +53,7 @@ const ShoppingNavigation = () => {
     const fastestPath = useSelector(selectFastestPath);
     const shop = location.state.shop;
     const dispatch = useDispatch();
+    const isUserLogged = useSelector(selectLoggedIn);
     const findingPath = React.useRef(false);
     const startPoint = React.useRef(shop.mapEntryPoint);
     const [loadProcess, setLoadProcess] = React.useState(false);
@@ -116,11 +119,11 @@ const ShoppingNavigation = () => {
         if (productIsAvailable) {
             setAvailableProducts(availableProducts.filter((el) => el.id !== productId));
             setBoughtProducts([product, ...boughtProducts]);
-            dispatch(removeProductFromCart(product.id.toString()))
+            !isUserLogged ? dispatch(removeProductFromCart(product.id.toString())) : dispatch(removeProductFromUserCart(product.id.toString()));
         } else {
             setBoughtProducts(boughtProducts.filter((el) => el.id !== productId));
             setAvailableProducts([product, ...availableProducts]);
-            dispatch(addProductToCart(product.id.toString()))
+            !isUserLogged ? dispatch(addProductToCart(product.id.toString())) : dispatch(addProductToUserCart(product.id.toString()));
         }
 
     }
