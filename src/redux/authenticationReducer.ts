@@ -40,7 +40,7 @@ export const authSlice = createSlice({
         registerEnd: (state) => {
             state.registering = false;
         },
-        logout: (state) => {
+        logoutInner: (state) => {
             state.loggedIn = false;
             state.userToken = null;
         }
@@ -48,7 +48,12 @@ export const authSlice = createSlice({
 });
 
 //actions
-export const { loginRequest, loginSuccess, loginFailure, registerRequest, registerEnd, logout } = authSlice.actions;
+export const { loginRequest, loginSuccess, loginFailure, registerRequest, registerEnd, logoutInner } = authSlice.actions;
+
+export const logout = () => async (dispatch: React.Dispatch<AnyAction>) => {
+    await AsyncStorage.removeItem('user');
+    dispatch(logoutInner());
+}
 
 export const setUserToken = () => async (dispatch: React.Dispatch<AnyAction>) => {
     const token = await AsyncStorage.getItem('user');
@@ -60,8 +65,7 @@ export const setUserToken = () => async (dispatch: React.Dispatch<AnyAction>) =>
 }
 
 export const logoutRequest = () => async (dispatch: React.Dispatch<AnyAction>) => {
-    await AsyncStorage.removeItem('user')
-    dispatch(logout());
+    logout()
     dispatch(setUser({}))
     dispatch(openSnackBar({ message: 'Successfully sign out', status: 'success' }))
 };
